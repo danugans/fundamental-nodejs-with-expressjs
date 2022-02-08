@@ -5,9 +5,9 @@ const { QueryTypes } = require("sequelize");
 // Function addUsers for insert user data to database
 exports.addUsers = async (req, res) => {
   try {
-    const { email, password, name, status } = req.body;
+    const { email, password, name } = req.body;
 
-    const query = `INSERT INTO users (email,password,name,status) VALUES ('${email}','${password}','${name}','${status}')`;
+    const query = `INSERT INTO users (email,password,name) VALUES ('${email}','${password}','${name}')`;
 
     await db.sequelize.query(query);
 
@@ -49,10 +49,7 @@ exports.getUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const data = await db.sequelize.query(
-      `SELECT * FROM users WHERE id = ${id}`,
-      { type: QueryTypes.SELECT }
-    );
+    const data = await db.sequelize.query(`SELECT * FROM users WHERE id = ${id}`, { type: QueryTypes.SELECT });
 
     res.send({
       status: "success",
@@ -68,3 +65,28 @@ exports.getUser = async (req, res) => {
 };
 
 // Create controller update User here ...
+exports.updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { email, password, name } = req.body;
+
+    const query = `UPDATE users 
+                      SET email = '${email}', password = '${password}', name = '${name}'
+                      WHERE id = ${id}`;
+
+    await db.sequelize.query(query);
+
+    res.send({
+      status: "success",
+      message: `Update user id: ${id} finished`,
+      data: req.body,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: "failed",
+      message: "Server Error",
+    });
+  }
+};

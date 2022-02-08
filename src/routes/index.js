@@ -3,16 +3,10 @@ const express = require("express");
 const router = express.Router();
 
 // Controller
-const {
-  getTodos,
-  getTodo,
-  addTodo,
-  updateTodo,
-  deleteTodo,
-} = require("../controllers/todo");
+const { getTodos, getTodo, addTodo, updateTodo, deleteTodo } = require("../controllers/todo");
 // Get updateUser from user controller here ...
 const { addUsers, getUsers, getUser } = require("../controllers/user");
-
+const { ...updateUser } = require("../controllers/user");
 // Route
 router.get("/todos", getTodos);
 router.get("/todo/:id", getTodo);
@@ -24,5 +18,6 @@ router.post("/user", addUsers);
 router.get("/users", getUsers);
 router.get("/user/:id", getUser);
 // Create Route for update user here ...
+router.patch("/user/:id", updateUser);
 
 module.exports = router;
